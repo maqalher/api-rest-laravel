@@ -31,7 +31,13 @@ Route::get('/test', 'PruebasControler@test');
         API RESTFUL utliza todos los metodos
 */
 
-
+// Rutas del controlador de usuarios
 Route::post('api/register', 'UserController@register');
-
 Route::post('api/login', 'UserController@login');
+Route::put('api/user/update', 'UserController@update');
+Route::post('api/user/upload', 'UserController@upload')->middleware('api.auth');
+Route::get('api/user/avatar/{filename}', 'UserController@getImage');
+Route::get('api/user/detail/{id}', 'UserController@detail');
+
+// Rutas del controlador de categorias
+Route::resource('/api/category', 'CategoryController');
