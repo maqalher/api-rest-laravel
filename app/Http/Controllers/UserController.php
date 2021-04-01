@@ -38,7 +38,7 @@ class UserController extends Controller
                 // Validacion ha fallado
                 $data = array(
                     'status' => 'error',
-                    'code' => 404,
+                    'code' => 400,
                     'message' => 'El usario no se ha creado',
                     'errors' => $validate->errors()
                 );
@@ -62,7 +62,7 @@ class UserController extends Controller
                 $user->save();
 
                 $data = array(
-                    'status' => 'error',
+                    'status' => 'success',
                     'code' => 200,
                     'message' => 'El usuario se ha creado',
                     'user' => $user
