@@ -72,7 +72,7 @@ class CategoryController extends Controller
 
                 $data = [
                     'code' => 200,
-                    'status' => 'succes',
+                    'status' => 'success',
                     'category' => $category
                 ];
             }

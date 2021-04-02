@@ -110,7 +110,7 @@ class UserController extends Controller
             // Devolver token o datos
             $signup = $jwtAuth->signup($params->email, $pwd);
 
-            if(!empty($params->gettoken)){
+            if (!empty($params->gettoken)) {
                 $signup = $jwtAuth->signup($params->email, $pwd, true);
             }
         }
@@ -118,7 +118,8 @@ class UserController extends Controller
         return response()->json($signup, 200);
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
 
         // comprobar si el usuario esta identificado
         $token = $request->header('Authorization');
@@ -131,17 +132,17 @@ class UserController extends Controller
         $json = $request->input('json', null);
         $params_array = json_decode($json, true);
 
-        if($checkToken && !empty($params_array)){
+        if ($checkToken && !empty($params_array)) {
             // Actualizar usuario
 
             // Sacar usuario identificado
             $user = $jwtAuth->checkToken($token, true);
 
-             // Validar datos
-             $validate = \Validator::make($params_array, [
+            // Validar datos
+            $validate = \Validator::make($params_array, [
                 'name' => 'required|alpha',
                 'surname' => 'required|alpha',
-                'email' => 'required|email|unique:users,'.$user->sub, // pasa el id del usuario
+                'email' => 'required|email|unique:users,' . $user->sub, // pasa el id del usuario
             ]);
 
             // Quitar los campos que no quiero actualizar
@@ -161,8 +162,7 @@ class UserController extends Controller
                 'user' => $user,
                 'changes' => $params_array
             );
-
-        }else {
+        } else {
             $data = array(
                 'code' => 400,
                 'status' => 'error',
@@ -173,27 +173,29 @@ class UserController extends Controller
         return response()->json($data, $data['code']);
     }
 
-    public function upload(Request $request) {
+    public function upload(Request $request)
+    {
 
         // Recoger datos de la peticion
         $image = $request->file('file0');
+
 
         // Validacion de imagen
         $validate = \Validator::make($request->all(), [
             'file0' => 'required|image|mimes:png,jpg,jpeg,gif'
         ]);
+        // dd($request);
 
         // Guardar imagen
-        if(!$image || $validate->fails()){
+        if (!$image || $validate->fails()) {
 
             $data = array(
                 'code' => 400,
                 'status' => 'error',
                 'message' => 'Error al subir imagen'
             );
-
-        }else{
-            $image_name = time().$image->getClientOriginalName(); // crea el nombre de la imagen para que sea unica
+        } else {
+            $image_name = time() . $image->getClientOriginalName(); // crea el nombre de la imagen para que sea unica
             \Storage::disk('users')->put($image_name, \File::get($image)); // agrega la imagen al server en la carpeta users
 
             $data = array(
@@ -206,14 +208,14 @@ class UserController extends Controller
         return response()->json($data, $data['code']);
     }
 
-    public function getImage($filename) {
+    public function getImage($filename)
+    {
         $isset = \Storage::disk('users')->exists($filename);
 
-        if($isset){
+        if ($isset) {
             $file = \Storage::disk('users')->get($filename);
             return new Response($file, 200);
-
-        }else {
+        } else {
             $data = array(
                 'code' => 404,
                 'status' => 'error',
@@ -224,16 +226,17 @@ class UserController extends Controller
         return response()->json($data, $data['code']);
     }
 
-    public function detail($id) {
+    public function detail($id)
+    {
         $user = User::find($id);
 
-        if(is_object($user)){
+        if (is_object($user)) {
             $data = array(
                 'code' => 200,
                 'status' => 'success',
                 'user' => $user
             );
-        }else {
+        } else {
             $data = array(
                 'code' => 404,
                 'status' => 'error',
@@ -243,5 +246,4 @@ class UserController extends Controller
 
         return response()->json($data, $data['code']);
     }
-
 }
