@@ -241,7 +241,7 @@ class PostController extends Controller
             $data = [
                 'code' => 200,
                 'status' => 'success',
-                'post' => $image_name,
+                'image' => $image_name,
             ];
         }
 
