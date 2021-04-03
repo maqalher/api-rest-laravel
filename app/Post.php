@@ -10,7 +10,7 @@ class Post extends Model
     protected $tale = 'posts';
 
     protected $fillable = [
-        'title', 'content', 'categpry_id'
+        'title', 'content', 'category_id'
     ];
 
     // Relacion de uno a muchos inversa (muchos a uno)
