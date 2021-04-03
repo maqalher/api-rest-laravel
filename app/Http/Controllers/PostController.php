@@ -30,7 +30,7 @@ class PostController extends Controller
         $post = Post::find($id);
 
         if (is_object($post)) {
-            $post = Post::find($id)->load('category');
+            $post = Post::find($id)->load('category')->load('user');
             $data = [
                 'code' => 200,
                 'status' => 'success',
